@@ -46,3 +46,17 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
+
+
+class GroupListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+
+class GroupGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+
