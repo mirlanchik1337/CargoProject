@@ -1,31 +1,24 @@
-# Use the official Python 3.10 image as the base image
-FROM python:3.10
+# Используйте официальный образ Python как базовый
+FROM python:3.9
 
-# Set environment variables to control Python's behavior
-ENV PYTHONUNBUFFERED 1
+# Установите рабочий каталог в контейнере
+WORKDIR /usr/src/app
+
+# Установите переменные среды
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Create and set the working directory inside the container
-WORKDIR /app
+# Установите зависимости
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the requirements file into the container and install dependencies
-COPY requirements.txt /app/
-RUN pip install -r requirements.txt
+# Копируйте проект в контейнер
+COPY . .
 
-# Copy the rest of your application code into the container
-COPY . /app/
+# Выполните миграции и сбор статических файлов
 
-# Install any additional dependencies if needed
-# RUN pip install some-package
-
-# Set the DJANGO_SETTINGS_MODULE environment variable
-ENV DJANGO_SETTINGS_MODULE=core.settings.base
-
-# Run database migrations
 RUN python manage.py migrate
 
-# Expose the port on which your application will run (change it if necessary)
-EXPOSE 8000
 
-# Start the application
-CMD ["python", "manage.py", "runserver"]
+# Укажите команду для запуска сервера
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
